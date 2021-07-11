@@ -17,6 +17,9 @@ print_colorized checking local-files
 sha512sum ~/.bashrc > database/dot-bashrc
 cat ~/.config/autostart/* | sha512sum > database/dot-config-autostart
 
+print_colorized checking system-files
+ls -d -l /etc/cron* /etc/ssh/sshd_config | cut -f1 -d' ' | sha512sum > database/sysfile-permissions
+
 print_colorized checking rkhunter
 sudo rkhunter --check --cronjob --disable ipc_shared_mem --report-warnings-only > database/rkhunter
 
