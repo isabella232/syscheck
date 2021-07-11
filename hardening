@@ -22,3 +22,15 @@ net.ipv4.icmp_echo_ignore_broadcasts=1
 net.ipv4.icmp_ignore_bogus_error_messages=1
 # Make sure spoofed packets get logged
 net.ipv4.conf.all.log_martians = 1
+
+
+# disable send packet redirects
+net.ipv4.conf.all.send_redirects=0
+net.ipv4.conf.default.send_redirects=0
+
+# disable ICMP redirects
+net.ipv4.conf.all.accept_redirects=0
+net.ipv4.conf.default.accept_redirects=0
+
+# enable bad error message protection
+net.ipv4.icmp_ignore_bogus_error_responses
