@@ -25,7 +25,7 @@ print_colorized checking system-files-permissions
 ls -d -l /etc/cron* /etc/ssh/sshd_config | cut -f1 -d' ' | sha512sum > database/sysfile-permissions
 
 print_colorized checking dns
-/usr/bin/nslookup one.one.one.one | grep -v "::" > database/dns
+/usr/bin/nslookup one.one.one.one | head -n 2 > database/dns
 
 print_colorized checking loaded-kernel-modules
 lsmod | cut -f1 -d' ' | sort -u > database/loaded-kernel-modules
