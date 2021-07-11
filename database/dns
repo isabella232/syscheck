@@ -7,7 +7,7 @@ Address: 1.1.1.1
 Name:	one.one.one.one
 Address: 1.0.0.1
 Name:	one.one.one.one
-Address: 2606:4700:4700::1001
-Name:	one.one.one.one
 Address: 2606:4700:4700::1111
+Name:	one.one.one.one
+Address: 2606:4700:4700::1001
 
