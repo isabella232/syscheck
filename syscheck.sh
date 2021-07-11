@@ -40,4 +40,6 @@ print_colorized checking chkrootkit
 sudo chkrootkit | grep -v '!' > database/chkrootkit
 
 print_colorized all done!
-print_colorized git diff
+echo
+print_colorized git status
+git status
