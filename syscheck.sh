@@ -22,7 +22,10 @@ sha512sum /etc/resolv.conf > database/etc-resolv-conf
 sha512sum /etc/rc.local > database/etc-rc-local
 
 print_colorized checking system-files-permissions
-ls -d -l /etc/cron* /etc/ssh/sshd_config | cut -f1 -d' ' | sha512sum > database/sysfile-permissions
+ls -d -l /etc/cron* /etc/ssh/sshd_config /usr/bin/nslookup | cut -f1 -d' ' | sha512sum > database/sysfile-permissions
+
+print_colorized checking dns
+/usr/bin/nslookup one.one.one.one > database/dns
 
 print_colorized checking rkhunter
 sudo rkhunter --check --cronjob --disable ipc_shared_mem --report-warnings-only > database/rkhunter
