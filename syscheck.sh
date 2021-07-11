@@ -27,6 +27,9 @@ ls -d -l /etc/cron* /etc/ssh/sshd_config | cut -f1 -d' ' | sha512sum > database/
 print_colorized checking dns
 /usr/bin/nslookup one.one.one.one | head -n 2 > database/dns
 
+print_colorized checking nmap-portscan
+/usr/bin/nmap 127.0.0.1 | grep -v "Starting" | grep -v "latency" | grep -v "scanned" > database/nmap-portscan
+
 print_colorized checking loaded-kernel-modules
 lsmod | cut -f1 -d' ' | sort -u > database/loaded-kernel-modules
 
@@ -37,3 +40,4 @@ print_colorized checking chkrootkit
 sudo chkrootkit | grep -v '!' > database/chkrootkit
 
 print_colorized all done!
+print_colorized git diff

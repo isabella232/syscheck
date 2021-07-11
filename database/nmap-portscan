@@ -1,0 +1,6 @@
+Nmap scan report for localhost (127.0.0.1)
+Not shown: 998 closed ports
+PORT   STATE SERVICE
+22/tcp open  ssh
+25/tcp open  smtp
+
