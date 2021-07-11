@@ -20,6 +20,7 @@ cat ~/.config/autostart/* | sha512sum > database/dot-config-autostart
 print_colorized checking system-files
 sha512sum /etc/resolv.conf > database/etc-resolv-conf
 sha512sum /etc/rc.local > database/etc-rc-local
+sha512sum /etc/fstab > database/etc-fstab
 
 print_colorized checking system-files-permissions
 ls -d -l /etc/cron* /etc/ssh/sshd_config | cut -f1 -d' ' | sha512sum > database/sysfile-permissions
