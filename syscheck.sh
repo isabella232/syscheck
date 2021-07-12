@@ -4,20 +4,20 @@ OUTPUT="output"
 DATABASE="database"
 
 test_file () {
+	if [ -d "$1" ]; then
+		return
+	fi
 	echo "Checking $1"
-	TMP=`echo $1 | sed 's/\//_/g'`
-	GITFILE="file_"$TMP
+	GITFILE=`echo $1 | sed 's/\//_/g'`
 	sha512sum $1 > $DATABASE/$GITFILE
 }
 
 test_directory () {
-	echo "Checking $1"
-	TMP=`echo $1 | sed 's/\//_/g'`
-	GITFILE="directory_"$TMP
-	cat $1/*> $OUTPUT/$GITFILE
-	sha512sum  $OUTPUT/$GITFILE > $DATABASE/$GITFILE
+	FILES=`find $1`
+	for file in $FILES; do
+		test_file $file
+	done
 }
-#*/
 
 test_permissions () {
 	echo "Checking permissions $1"
@@ -25,6 +25,13 @@ test_permissions () {
 	GITFILE="permissions_"$TMP
 	ls -d -l $1 |  awk '{print $1 $9}' > $OUTPUT/$GITFILE
 	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
+}
+
+test_local_ssh_directory () {
+	FILES=`find ~/.ssh | grep -v known_hosts`
+	for file in $FILES; do
+		test_file $file
+	done
 }
 
 test_rkhunter () {
@@ -63,27 +70,7 @@ test_kernel_modules () {
 	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
 }
 
-test_local_ssh_directory () {
-	FILES=`find ~/.ssh | grep -v known_hosts`
-	echo > tmpfile
-	for file in $FILES; do
-		sha512sum $file >> tmpfile
-	done
-	GITFILE="local_ssh_dir"
-	cat tmpfile | sha512sum > $DATABASE/file_local_ssh_directory
-	rm tmpfile
-}
 
-test_local_gnupg_directory () {
-	FILES=`find ~/.gnupg`
-	echo > tmpfile
-	for file in $FILES; do
-		sha512sum $file >> tmpfile
-	done
-	GITFILE="local_gunpg_dir"
-	cat tmpfile | sha512sum > $DATABASE/file_local_gnupg_directory
-	rm tmpfile
-}
 
 
 # create database and output directories
@@ -97,13 +84,7 @@ mkdir -p $OUTPUT
 test_file ~/.bashrc
 test_directory ~/.config/autostart
 test_local_ssh_directory
-test_local_gnupg_directory
-
-exit
-
-
-
-
+test_directory ~/.gnupg
 
 # system file tests
 test_file /etc/rc.local
@@ -121,8 +102,8 @@ test_permissions /etc/cron.weekly
 
 # rootkit tests
 test_kernel_modules
-#test_rkhunter
-#test_chkrootkit
+test_rkhunter
+test_chkrootkit
 
 # closing down
 echo "All done! Test results as follow:"
