@@ -1,36 +1,34 @@
-# set some permissions
-chmod 600 /etc/crontab
-chmod 600 /etc/ssh/sshd_config
-chmod 700 /etc/cron.d
-chmod 700 /etc/cron.daily
-chmod 700 /etc/cron.hourly
-chmod 700 /etc/cron.weekly
-chmod 700 /etc/cron.monthly
+# Harden cron
+# sudo chmod 600 /etc/crontab
+# sudo chmod 700 /etc/cron.d
+# sudo chmod 700 /etc/cron.daily
+# sudo chmod 700 /etc/cron.hourly
+# sudo chmod 700 /etc/cron.weekly
+# sudo chmod 700 /etc/cron.monthly
+
+# Harden sshd
+# sudo chmod 600 /etc/ssh/sshd_config
 
 
-In /etc/sysctl.conf
+# Kernel hardening - in /etc/sysctl.conf:
 
 # Turn on execshield
-kernel.exec-shield=1
-kernel.randomize_va_space=1
-# Enable IP spoofing protection
+#kernel.exec-shield=1
+#kernel.randomize_va_space=1
+
+# TCP/IP
 net.ipv4.conf.all.rp_filter=1
-# Disable IP source routing
+net.ipv4.conf.default.rp_filter=1
 net.ipv4.conf.all.accept_source_route=0
-# Ignoring broadcasts request
-net.ipv4.icmp_echo_ignore_broadcasts=1
-net.ipv4.icmp_ignore_bogus_error_messages=1
-# Make sure spoofed packets get logged
 net.ipv4.conf.all.log_martians = 1
-
-
-# disable send packet redirects
-net.ipv4.conf.all.send_redirects=0
-net.ipv4.conf.default.send_redirects=0
-
-# disable ICMP redirects
 net.ipv4.conf.all.accept_redirects=0
 net.ipv4.conf.default.accept_redirects=0
+net.ipv4.conf.all.send_redirects=0
+net.ipv4.conf.default.send_redirects=0
+net.ipv4.tcp_syncookies=1
 
-# enable bad error message protection
+# ICMP
+net.ipv4.icmp_echo_ignore_broadcasts=1
+net.ipv4.icmp_ignore_bogus_error_messages=1
 net.ipv4.icmp_ignore_bogus_error_responses
+

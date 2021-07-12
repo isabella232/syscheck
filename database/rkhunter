@@ -1,8 +1,0 @@
-Warning: The command '/usr/bin/egrep' has been replaced by a script: /usr/bin/egrep: POSIX shell script, ASCII text executable
-Warning: The command '/usr/bin/fgrep' has been replaced by a script: /usr/bin/fgrep: POSIX shell script, ASCII text executable
-Warning: The command '/usr/bin/which' has been replaced by a script: /usr/bin/which: POSIX shell script, ASCII text executable
-Warning: The command '/usr/bin/lwp-request' has been replaced by a script: /usr/bin/lwp-request: Perl script text executable
-Warning: The SSH configuration option 'PermitRootLogin' has not been set.
-         The default value may be 'yes', to allow root access.
-Warning: Suspicious file types found in /dev:
-         /dev/shm/fdns-stats-127.1.1.1: data
