@@ -56,13 +56,20 @@ test_pkgmgr_update ()  {
 	sudo apt-get -y upgrade
 }
 
+test_kernel_modules () {
+	echo "Checking kernel modules"
+	GITFILE="kernel_modules"
+	lsmod | cut -f1 -d' ' | sort -u > $OUTPUT/$GITFILE
+	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
+}
+
 # create database and output directories
 mkdir -p $DATABASE
 mkdir -p $OUTPUT
 
-test_pkgmgr_update
-test_pkgmgr_integrity
-
+#test_pkgmgr_update
+#test_pkgmgr_integrity
+#
 # local file tests
 test_file ~/.bashrc
 test_directory ~/.config/autostart
@@ -80,14 +87,21 @@ test_permissions /etc/crontab
 test_permissions /etc/cron.weekly
 
 # rootkit tests
-test_rkhunter
-test_chkrootkit
+test_kernel_modules
+#test_rkhunter
+#test_chkrootkit
 
 # closing down
-echo "all done!"
-echo
-echo
-git status
+echo "All done! Test results as follow:"
+echo "******************************"
+git status -s | grep -v output
+echo "******************************"
+
+# Archive the output directory. The number is the epoch time. Use date command to convert it:
+#         $ date --date='@2147483647'
+TMP="output_"`date +%s`.tar.xz
+tar -cJf $TMP output
+echo "The output directory was archived in $TMP"
 
 
-# lsmod | cut -f1 -d' ' | sort -u > database/loaded-kernel-modules
+
