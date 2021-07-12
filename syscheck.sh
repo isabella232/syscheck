@@ -63,6 +63,29 @@ test_kernel_modules () {
 	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
 }
 
+test_local_ssh_directory () {
+	FILES=`find ~/.ssh | grep -v known_hosts`
+	echo > tmpfile
+	for file in $FILES; do
+		sha512sum $file >> tmpfile
+	done
+	GITFILE="local_ssh_dir"
+	cat tmpfile | sha512sum > $DATABASE/file_local_ssh_directory
+	rm tmpfile
+}
+
+test_local_gnupg_directory () {
+	FILES=`find ~/.gnupg`
+	echo > tmpfile
+	for file in $FILES; do
+		sha512sum $file >> tmpfile
+	done
+	GITFILE="local_gunpg_dir"
+	cat tmpfile | sha512sum > $DATABASE/file_local_gnupg_directory
+	rm tmpfile
+}
+
+
 # create database and output directories
 mkdir -p $DATABASE
 mkdir -p $OUTPUT
@@ -73,11 +96,21 @@ mkdir -p $OUTPUT
 # local file tests
 test_file ~/.bashrc
 test_directory ~/.config/autostart
+test_local_ssh_directory
+test_local_gnupg_directory
+
+exit
+
+
+
+
 
 # system file tests
 test_file /etc/rc.local
 test_file /etc/fstab
 test_file /etc/resolv.conf
+test_file /etc/ssl/openssl.cnf
+test_directory /etc/ssl/certs
 test_permissions /etc/ssh/sshd_config
 test_permissions /etc/cron.d
 test_permissions /etc/cron.daily
