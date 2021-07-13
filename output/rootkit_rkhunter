@@ -1,0 +1,27 @@
+Warning: The file properties have changed:
+         File: /usr/local/bin/ssh
+         Current hash: d98e3d2375fde87a939e458041c5161fc048afaddbd01e7374f886d56fe7624a
+         Stored hash : b4550486cb82ea52529740dd292f3b8e91cb51ca83560b085cf716ac7d357962
+Warning: The file properties have changed:
+         File: /usr/local/bin/strings
+         Current hash: d98e3d2375fde87a939e458041c5161fc048afaddbd01e7374f886d56fe7624a
+         Stored hash : b4550486cb82ea52529740dd292f3b8e91cb51ca83560b085cf716ac7d357962
+Warning: The file properties have changed:
+         File: /usr/local/bin/wget
+         Current hash: d98e3d2375fde87a939e458041c5161fc048afaddbd01e7374f886d56fe7624a
+         Stored hash : b4550486cb82ea52529740dd292f3b8e91cb51ca83560b085cf716ac7d357962
+Warning: The command '/usr/bin/egrep' has been replaced by a script: /usr/bin/egrep: POSIX shell script, ASCII text executable
+Warning: The command '/usr/bin/fgrep' has been replaced by a script: /usr/bin/fgrep: POSIX shell script, ASCII text executable
+Warning: The command '/usr/bin/which' has been replaced by a script: /usr/bin/which: POSIX shell script, ASCII text executable
+Warning: The file properties have changed:
+         File: /usr/bin/firejail
+         Current hash: d98e3d2375fde87a939e458041c5161fc048afaddbd01e7374f886d56fe7624a
+         Stored hash : b4550486cb82ea52529740dd292f3b8e91cb51ca83560b085cf716ac7d357962
+         Current size: 2181816    Stored size: 2179448
+         Current file modification time: 1626191530 (13-Jul-2021 11:52:10)
+         Stored file modification time : 1625752515 (08-Jul-2021 09:55:15)
+Warning: The command '/usr/bin/lwp-request' has been replaced by a script: /usr/bin/lwp-request: Perl script text executable
+Warning: The SSH configuration option 'PermitRootLogin' has not been set.
+         The default value may be 'yes', to allow root access.
+Warning: Suspicious file types found in /dev:
+         /dev/shm/fdns-stats-127.1.1.1: data

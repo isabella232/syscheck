@@ -51,7 +51,7 @@ test_chkrootkit () {
 }
 
 test_pkgmgr_integrity () {
-	echo "Verifying files (md5sum) installed by dpkg. This will take a few minutes..."
+	echo "Verifying files (md5sum) installed by apt/dpkg. This will take a few minutes..."
 	GITFILE="pkgmgr_file-integrity"
 	sudo dpkg --verify | tee $OUTPUT/$GITFILE
 	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
@@ -60,7 +60,7 @@ test_pkgmgr_integrity () {
 test_pkgmgr_update ()  {
 	echo "System update"
 	sudo apt-get update
-	sudo apt-get autoremove
+	sudo apt-get -y autoremove
 	sudo apt-get -y upgrade
 }
 
@@ -78,9 +78,9 @@ test_kernel_modules () {
 mkdir -p $DATABASE
 mkdir -p $OUTPUT
 
-#test_pkgmgr_update
-#test_pkgmgr_integrity
-#
+test_pkgmgr_update
+test_pkgmgr_integrity
+
 # local file tests
 test_file ~/.bashrc
 test_directory ~/.config/autostart
@@ -104,7 +104,6 @@ test_permissions /etc/cron.hourly
 test_permissions /etc/cron.monthly
 test_permissions /etc/crontab
 test_permissions /etc/cron.weekly
-exit
 
 # rootkit tests
 test_kernel_modules
@@ -114,14 +113,14 @@ test_chkrootkit
 # closing down
 echo "All done! Test results as follow:"
 echo "******************************"
-git status -s | grep -v output
+git status -s
 echo "******************************"
 
 # Archive the output directory. The number is the epoch time. Use date command to convert it:
 #         $ date --date='@2147483647'
-TMP="output_"`date +%s`.tar.xz
-tar -cJf $TMP output
-echo "The output directory was archived in $TMP"
+#TMP="output_"`date +%s`.tar.xz
+#tar -cJf $TMP output
+#echo "The output directory was archived in $TMP"
 
 
 
