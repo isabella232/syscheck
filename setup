@@ -1,0 +1,10 @@
+rkhunter setup:
+
+In /etc/rkhunter.conf add
+
+EXCLUDE_USER_FILEPROP_FILES_DIRS=/usr/bin/firejail
+EXCLUDE_USER_FILEPROP_FILES_DIRS=/usr/local/bin/*
+
+and run
+
+$ sudo khunter --propupd

@@ -78,8 +78,8 @@ test_kernel_modules () {
 mkdir -p $DATABASE
 mkdir -p $OUTPUT
 
-test_pkgmgr_update
-test_pkgmgr_integrity
+#test_pkgmgr_update
+#test_pkgmgr_integrity
 
 # local file tests
 test_file ~/.bashrc
