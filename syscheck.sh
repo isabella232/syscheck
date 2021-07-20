@@ -64,16 +64,6 @@ test_pkgmgr_update ()  {
 	sudo apt-get -y upgrade
 }
 
-test_kernel_modules () {
-	echo "Checking kernel modules"
-	GITFILE="kernel_modules"
-	lsmod | cut -f1 -d' ' | sort -u > $OUTPUT/$GITFILE
-	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
-}
-
-
-
-
 # create database and output directories
 mkdir -p $DATABASE
 mkdir -p $OUTPUT
@@ -94,7 +84,7 @@ test_file /etc/resolv.conf
 test_file /etc/nsswitch.conf
 test_file /etc/host.deny
 test_file /etc/host.allow
-test_directory /etc/security
+sudo test_directory /etc/security
 test_file /etc/ssl/openssl.cnf
 test_directory /etc/ssl/certs
 test_permissions /etc/ssh/sshd_config
@@ -106,7 +96,6 @@ test_permissions /etc/crontab
 test_permissions /etc/cron.weekly
 
 # rootkit tests
-test_kernel_modules
 test_rkhunter
 test_chkrootkit
 

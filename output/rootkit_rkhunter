@@ -1,6 +1,26 @@
+Warning: The file properties have changed:
+         File: /usr/local/bin/ssh
+         Current inode: 1442361    Stored inode: 1442360
+         Current file modification time: 1626616573 (18-Jul-2021 09:56:13)
+         Stored file modification time : 1624977372 (29-Jun-2021 10:36:12)
+Warning: The file properties have changed:
+         File: /usr/local/bin/strings
+         Current inode: 1442365    Stored inode: 1442361
+         Current file modification time: 1626616573 (18-Jul-2021 09:56:13)
+         Stored file modification time : 1624977372 (29-Jun-2021 10:36:12)
+Warning: The file properties have changed:
+         File: /usr/local/bin/wget
+         Current inode: 1442375    Stored inode: 1442373
+         Current file modification time: 1626616573 (18-Jul-2021 09:56:13)
+         Stored file modification time : 1624977372 (29-Jun-2021 10:36:12)
 Warning: The command '/usr/bin/egrep' has been replaced by a script: /usr/bin/egrep: POSIX shell script, ASCII text executable
 Warning: The command '/usr/bin/fgrep' has been replaced by a script: /usr/bin/fgrep: POSIX shell script, ASCII text executable
 Warning: The command '/usr/bin/which' has been replaced by a script: /usr/bin/which: POSIX shell script, ASCII text executable
+Warning: The file properties have changed:
+         File: /usr/bin/firejail
+         Current inode: 1311725    Stored inode: 1324811
+         Current file modification time: 1626622512 (18-Jul-2021 11:35:12)
+         Stored file modification time : 1626276681 (14-Jul-2021 11:31:21)
 Warning: The command '/usr/bin/lwp-request' has been replaced by a script: /usr/bin/lwp-request: Perl script text executable
 Warning: The SSH configuration option 'PermitRootLogin' has not been set.
          The default value may be 'yes', to allow root access.
