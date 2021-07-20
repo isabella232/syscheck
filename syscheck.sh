@@ -38,7 +38,7 @@ test_rkhunter () {
 	test_file /etc/rkhunter.conf
 	echo "Checking rkhunter, please wait..."
 	GITFILE="rootkit_rkhunter"
-	sudo rkhunter --check --cronjob --disable ipc_shared_mem --report-warnings-only > $OUTPUT/$GITFILE
+	rkhunter --check --cronjob --disable ipc_shared_mem --report-warnings-only > $OUTPUT/$GITFILE
 	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
 }
 
@@ -46,22 +46,22 @@ test_chkrootkit () {
 	test_file /etc/chkrootkit.conf
 	echo "Checking chkrootkit, please wait..."
 	GITFILE="rootkit_chkrootkit"
-	sudo chkrootkit | grep -v '!' > $OUTPUT/$GITFILE
+	chkrootkit | grep -v '!' > $OUTPUT/$GITFILE
 	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
 }
 
 test_pkgmgr_integrity () {
 	echo "Verifying files (md5sum) installed by apt/dpkg. This will take a few minutes..."
 	GITFILE="pkgmgr_file-integrity"
-	sudo dpkg --verify | tee $OUTPUT/$GITFILE
+	dpkg --verify | tee $OUTPUT/$GITFILE
 	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
 }
 
 test_pkgmgr_update ()  {
 	echo "System update"
-	sudo apt-get update
-	sudo apt-get -y autoremove
-	sudo apt-get -y upgrade
+	apt-get update
+	apt-get -y autoremove
+	apt-get -y upgrade
 }
 
 # create database and output directories
@@ -84,16 +84,25 @@ test_file /etc/resolv.conf
 test_file /etc/nsswitch.conf
 test_file /etc/host.deny
 test_file /etc/host.allow
-sudo test_directory /etc/security
+test_directory /etc/security
 test_file /etc/ssl/openssl.cnf
 test_directory /etc/ssl/certs
+
 test_permissions /etc/ssh/sshd_config
+test_file /etc/ssh/sshd_config
+
 test_permissions /etc/cron.d
+test_file /etc/cron.d
 test_permissions /etc/cron.daily
+test_file /etc/cron.daily
 test_permissions /etc/cron.hourly
+test_file /etc/cron.hourly
 test_permissions /etc/cron.monthly
+test_file /etc/cron.monthly
 test_permissions /etc/crontab
+test_file /etc/crontab
 test_permissions /etc/cron.weekly
+test_file /etc/cron.weekly
 
 # rootkit tests
 test_rkhunter
