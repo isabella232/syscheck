@@ -19,21 +19,6 @@ test_directory () {
 	done
 }
 
-test_permissions () {
-	echo "Checking permissions $1"
-	TMP=`echo $1 | sed 's/\//_/g'`
-	GITFILE="permissions_"$TMP
-	ls -d -l $1 |  awk '{print $1 $9}' > $OUTPUT/$GITFILE
-	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
-}
-
-test_local_ssh_directory () {
-	FILES=`find ~/.ssh | grep -v known_hosts`
-	for file in $FILES; do
-		test_file $file
-	done
-}
-
 test_rkhunter () {
 	test_file /etc/rkhunter.conf
 	echo "Checking rkhunter, please wait..."
@@ -57,24 +42,24 @@ test_pkgmgr_integrity () {
 	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
 }
 
-test_pkgmgr_update ()  {
-	echo "System update"
-	apt-get update
-	apt-get -y autoremove
-	apt-get -y upgrade
-}
+
+if [ "$(whoami)" != "root" ]; then
+        echo "Script must be run as user: root"
+        exit 1
+fi
+
 
 # create database and output directories
 mkdir -p $DATABASE
 mkdir -p $OUTPUT
 
-#test_pkgmgr_update
-#test_pkgmgr_integrity
+# package manager test
+test_pkgmgr_integrity
 
 # local file tests
 test_file ~/.bashrc
 test_directory ~/.config/autostart
-test_local_ssh_directory
+test_directory ~/.ssh
 test_directory ~/.gnupg
 
 # system file tests
@@ -82,30 +67,21 @@ test_file /etc/rc.local
 test_file /etc/fstab
 test_file /etc/resolv.conf
 test_file /etc/nsswitch.conf
-test_file /etc/host.deny
-test_file /etc/host.allow
+#test_file /etc/host.deny
+#test_file /etc/host.allow
 test_directory /etc/security
 test_file /etc/ssl/openssl.cnf
-test_directory /etc/ssl/certs
-
-test_permissions /etc/ssh/sshd_config
-test_file /etc/ssh/sshd_config
-
-test_permissions /etc/cron.d
+test_directory /etc/ssl
+test_directory /etc/ssh
 test_file /etc/cron.d
-test_permissions /etc/cron.daily
 test_file /etc/cron.daily
-test_permissions /etc/cron.hourly
 test_file /etc/cron.hourly
-test_permissions /etc/cron.monthly
 test_file /etc/cron.monthly
-test_permissions /etc/crontab
 test_file /etc/crontab
-test_permissions /etc/cron.weekly
 test_file /etc/cron.weekly
 
 # rootkit tests
-test_rkhunter
+#test_rkhunter
 test_chkrootkit
 
 # closing down
