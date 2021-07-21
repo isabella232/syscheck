@@ -23,8 +23,7 @@ test_rkhunter () {
 	test_file /etc/rkhunter.conf
 	echo "Checking rkhunter, please wait..."
 	GITFILE="rootkit_rkhunter"
-	rkhunter --check --cronjob --disable ipc_shared_mem --report-warnings-only > $OUTPUT/$GITFILE
-	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
+	rkhunter --check --cronjob --disable properties,ipc_shared_mem,malware --report-warnings-only > $OUTPUT/$GITFILE
 }
 
 test_chkrootkit () {
@@ -32,14 +31,12 @@ test_chkrootkit () {
 	echo "Checking chkrootkit, please wait..."
 	GITFILE="rootkit_chkrootkit"
 	chkrootkit | grep -v '!' > $OUTPUT/$GITFILE
-	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
 }
 
 test_pkgmgr_integrity () {
 	echo "Verifying files (md5sum) installed by apt/dpkg. This will take a few minutes..."
 	GITFILE="pkgmgr_file-integrity"
 	dpkg --verify | tee $OUTPUT/$GITFILE
-	sha512sum $OUTPUT/$GITFILE > $DATABASE/$GITFILE
 }
 
 
@@ -81,7 +78,7 @@ test_file /etc/crontab
 test_file /etc/cron.weekly
 
 # rootkit tests
-#test_rkhunter
+test_rkhunter
 test_chkrootkit
 
 # closing down
