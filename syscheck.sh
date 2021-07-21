@@ -8,7 +8,7 @@ test_file () {
 		return
 	fi
 	echo "Checking $1"
-	GITFILE=`echo $1 | sed 's/\//_/g'`
+	GITFILE=`echo $1 | sed 's/\//%/g'`
 	sha512sum $1 > $DATABASE/$GITFILE
 }
 
@@ -46,13 +46,17 @@ mkdir -p $DATABASE
 mkdir -p $OUTPUT
 
 ARG_PKGMGR="yes"
+ARG_ROOTKIT="yes"
 while [ $# -gt 0 ]; do    # Until you run out of parameters . . .
     case "$1" in
     --no-pkgmgr)
         ARG_PKGMGR="no"
         ;;
+    --no-rootkits)
+        ARG_ROOTKITS="no"
+        ;;
     --help)
-        echo "Usage: sudo syscheck.sh [--no-pkgmgr]"
+        echo "Usage: sudo syscheck.sh [--no-pkgmgr] [--no-rootkits]"
         exit 0
         ;;
     esac
@@ -70,10 +74,18 @@ if [ $ARG_PKGMGR = "yes" ]; then
 fi
 
 # local file tests
-test_file ~/.bashrc
-test_directory ~/.config/autostart
-test_directory ~/.ssh
-test_directory ~/.gnupg
+test_file /home/netblue/.bashrc
+test_directory /home/netblue/.config/autostart
+test_directory /home/netblue/.ssh
+test_directory /home/netblue/.gnupg
+test_directory /home/netblue/.config/firejail
+test_directory /home/netblue/bin
+test_directory /home/netblue/config
+
+FILES=`ls /home/netblue/Desktop/*.desktop `
+for file in $FILES; do
+	test_file $file
+done
 
 # system file tests
 test_file /etc/rc.local
@@ -94,9 +106,15 @@ test_file /etc/cron.monthly
 test_file /etc/crontab
 test_file /etc/cron.weekly
 
+# /opt files
+test_file /opt/kdenlive-20.12.2-x86_64.appimage
+test_file /opt/LibreOffice-fresh.basic-x86_64.AppImage
+
 # rootkit tests
-test_rkhunter
-test_chkrootkit
+if [ $ARG_PKGMGR = "yes" ]; then
+	test_rkhunter
+	test_chkrootkit
+fi
 
 # closing down
 echo "All done! Test results as follow:"
