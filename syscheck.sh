@@ -40,18 +40,34 @@ test_pkgmgr_integrity () {
 }
 
 
-if [ "$(whoami)" != "root" ]; then
-        echo "Script must be run as user: root"
-        exit 1
-fi
-
 
 # create database and output directories
 mkdir -p $DATABASE
 mkdir -p $OUTPUT
 
+ARG_PKGMGR="yes"
+while [ $# -gt 0 ]; do    # Until you run out of parameters . . .
+    case "$1" in
+    --no-pkgmgr)
+        ARG_PKGMGR="no"
+        ;;
+    --help)
+        echo "Usage: sudo syscheck.sh [--no-pkgmgr]"
+        exit 0
+        ;;
+    esac
+    shift       # Check next set of parameters.
+done
+
+if [ "$(whoami)" != "root" ]; then
+        echo "Script must be run as user: root"
+        exit 1
+fi
+
 # package manager test
-test_pkgmgr_integrity
+if [ $ARG_PKGMGR = "yes" ]; then
+	test_pkgmgr_integrity
+fi
 
 # local file tests
 test_file ~/.bashrc
@@ -64,6 +80,7 @@ test_file /etc/rc.local
 test_file /etc/fstab
 test_file /etc/resolv.conf
 test_file /etc/nsswitch.conf
+test_directory /etc/default
 #test_file /etc/host.deny
 #test_file /etc/host.allow
 test_directory /etc/security
