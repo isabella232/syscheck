@@ -1,0 +1,131 @@
+*** ../chkrootkit-0.54/chkrootkit	2020-12-20 00:32:29.040003633 -0500
+--- chkrootkit	2021-05-30 01:58:27.864993530 -0400
+***************
+*** 1,8 ****
+  #! /bin/sh
+  # -*- Shell-script -*-
+  
+! # $Id: chkrootkit, v 0.54 2020/12/24
+! CHKROOTKIT_VERSION='0.54' 
+  
+  # Authors: Nelson Murilo <nelson@pangeia.com.br> (main author) and
+  #          Klaus Steding-Jessen <jessen@cert.br>
+--- 1,8 ----
+  #! /bin/sh
+  # -*- Shell-script -*-
+  
+! # $Id: chkrootkit, v 0.55 2021/06/10
+! CHKROOTKIT_VERSION='0.55' 
+  
+  # Authors: Nelson Murilo <nelson@pangeia.com.br> (main author) and
+  #          Klaus Steding-Jessen <jessen@cert.br>
+***************
+*** 311,317 ****
+      prog=""
+      if [  \( "${SYSTEM}" = "Linux"  -o \( "${SYSTEM}" = "FreeBSD" -a \
+         `echo ${V} | ${awk} '{ if ($1 > 4.3 || $1 < 6.0) print 1; else print 0 }'` -eq 1 \) \) -a "${ROOTDIR}" = "/" ]; then
+!        [  -x ./chkproc -a "`find /proc 2>/dev/null| wc -l`" -gt 1 ] && prog="./chkproc"
+        [  -x ./chkdirs ] && prog="$prog ./chkdirs"
+        if [ "$prog" = "" -o ${mode} = "pm" ]; then
+           echo "not tested: can't exec $prog"
+--- 311,317 ----
+      prog=""
+      if [  \( "${SYSTEM}" = "Linux"  -o \( "${SYSTEM}" = "FreeBSD" -a \
+         `echo ${V} | ${awk} '{ if ($1 > 4.3 || $1 < 6.0) print 1; else print 0 }'` -eq 1 \) \) -a "${ROOTDIR}" = "/" ]; then
+!        [  -x ./chkproc -a "`find /proc -maxdepth 1 2>/dev/null| wc -l`" -gt 1 ] && prog="./chkproc"
+        [  -x ./chkdirs ] && prog="$prog ./chkdirs"
+        if [ "$prog" = "" -o ${mode} = "pm" ]; then
+           echo "not tested: can't exec $prog"
+***************
+*** 629,634 ****
+--- 629,643 ----
+        ## PWNLNX6 - An LKM Roottkit 
+        expertmode_output "${find} ${ROOTDIR}/tmp/suterusu"
+  
++       ## Umbreon 
++       expertmode_output "${find} ${ROOTDIR}usr/share/libc.so*"
++ 
++       ## KINSING.A Backdoor 
++       expertmode_output "${find} ${ROOTDIR}tmp/kdevtmp*"
++ 
++       ## RotaJakiro 
++       expertmode_output "${ls} ${ROOTDIR}bin/system-daemon"
++ 
+        ## Common SSH-SCANNERS
+        expertmode_output "${find} ${ROOTDIR}/tmp ${ROOTDIR}/var/tmp ${findargs} -name vuln.txt -o -name ssh-scan -o -name pscan2"
+  
+***************
+*** 1289,1295 ****
+     ## Hidden Cobra (IBM AIX) 
+     if [ "${QUIET}" != "t" ]; then
+        printn "Searching for Hidden Cobra ... "; fi
+!    if ${ls} "${ROOTDIR}tmp/.ICE-unix/m*.so" ${ROOTDIR}tmp/.ICE-unix/engine.so 2>/dev/null; then 
+        echo "INFECTED: Possible Malicious Hidden Cobra installed"
+     else
+        if [ "${QUIET}" != "t" ]; then echo "nothing found"; fi
+--- 1298,1304 ----
+     ## Hidden Cobra (IBM AIX) 
+     if [ "${QUIET}" != "t" ]; then
+        printn "Searching for Hidden Cobra ... "; fi
+!    if ${ls} ${ROOTDIR}tmp/.ICE-unix/m*.so ${ROOTDIR}tmp/.ICE-unix/engine.so 2>/dev/null; then 
+        echo "INFECTED: Possible Malicious Hidden Cobra installed"
+     else
+        if [ "${QUIET}" != "t" ]; then echo "nothing found"; fi
+***************
+*** 1322,1327 ****
+--- 1331,1363 ----
+        if [ "${QUIET}" != "t" ]; then echo "nothing found"; fi
+     fi
+  
++    ## Umbreon Linux Rootkit
++    if [ "${QUIET}" != "t" ]; then
++       printn "Searching for Umbreon lrk... "; fi
++    if  ${ls} ${ROOTDIR}usr/share/libc.so.* > /dev/null 2>&1 ; then
++       echo "INFECTED: Possible Malicious UMBREON LRK installed"
++    else
++       if [ "${QUIET}" != "t" ]; then echo "nothing found"; fi
++    fi
++ 
++    ## KINSING.A Backdoor 
++    if [ "${QUIET}" != "t" ]; then
++       printn "Searching for Kinsing.a backdoor... "; fi
++    if  ${ls} "${ROOTDIR}tmp/kdevtmpfsi" > /dev/null 2>&1 ; then
++       echo "INFECTED: Possible Malicious KINSING.A Backdoor installed"
++    else
++       if [ "${QUIET}" != "t" ]; then echo "nothing found"; fi
++    fi
++ 
++    ## RotaJakiro Backdoor 
++    if [ "${QUIET}" != "t" ]; then
++       printn "Searching for RotaJakiro backdoor... "; fi
++    if  ${ls} "${ROOTDIR}bin/systemd-daemon" > /dev/null 2>&1 ; then
++       echo "INFECTED: Possible Malicious JOTAJAKIRO Backdoor installed"
++    else
++       if [ "${QUIET}" != "t" ]; then echo "nothing found"; fi
++    fi
++ 
+     ###
+     ### Suspects PHP files
+     ###
+***************
+*** 1477,1485 ****
+      GENERIC_ROOTKIT_FEDORA=${GENERIC_ROOTKIT_LABEL} 
+      if [ -f  /etc/system-release ]; then 
+         v=`${egrep} -i fedora /etc/system-release | cut -d " " -f 3`
+         if [ "$v" -gt "32" ]; then 
+            GENERIC_ROOTKIT_FEDORA="bash|elite$|vejeta|\.ark|iroffer"
+!        fi
+      fi
+  
+      if [ "${EXPERT}" = "t" ]; then
+--- 1513,1522 ----
+      GENERIC_ROOTKIT_FEDORA=${GENERIC_ROOTKIT_LABEL} 
+      if [ -f  /etc/system-release ]; then 
+         v=`${egrep} -i fedora /etc/system-release | cut -d " " -f 3`
++        test -n "$v" &&  { 
+         if [ "$v" -gt "32" ]; then 
+            GENERIC_ROOTKIT_FEDORA="bash|elite$|vejeta|\.ark|iroffer"
+!        fi } 
+      fi
+  
+      if [ "${EXPERT}" = "t" ]; then

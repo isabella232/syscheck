@@ -8,7 +8,7 @@ test_file () {
 		return
 	fi
 	echo "Checking $1"
-	GITFILE=`echo $1 | sed 's/\//%/g'`
+	GITFILE=`echo $1 | sed 's/\//_/g'`
 	sha512sum $1 > $DATABASE/$GITFILE
 }
 
@@ -80,7 +80,6 @@ test_directory /home/netblue/.ssh
 test_directory /home/netblue/.gnupg
 test_directory /home/netblue/.config/firejail
 test_directory /home/netblue/bin
-test_directory /home/netblue/config
 
 FILES=`ls /home/netblue/Desktop/*.desktop `
 for file in $FILES; do
@@ -119,7 +118,7 @@ fi
 # closing down
 echo "All done! Test results as follow:"
 echo "******************************"
-git status -s
+#git status -s
 echo "******************************"
 
 # Archive the output directory. The number is the epoch time. Use date command to convert it:
