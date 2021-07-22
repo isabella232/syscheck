@@ -1,0 +1,4 @@
+Warning: The SSH configuration option 'PermitRootLogin' has not been set.
+         The default value may be 'yes', to allow root access.
+Warning: Suspicious file types found in /dev:
+         /dev/shm/fdns-stats-127.1.1.1: data
