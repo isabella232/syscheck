@@ -2,6 +2,13 @@
 
 OUTPUT="output"
 
+test_blake2sum() {
+	echo "blake2sum test"
+	cd src/blake2sum
+	./blake2sum > ../../$OUTPUT/blake2sum
+	cd ../..
+}
+
 test_rkhunter () {
 	echo "Checking rkhunter, please wait..."
 	rkhunter --check --cronjob --disable properties,ipc_shared_mem,malware --report-warnings-only > $OUTPUT/rkhunter
@@ -10,7 +17,7 @@ test_rkhunter () {
 test_chkrootkit () {
 	echo "Checking chkrootkit, please wait..."
 	cd src/chkrootkit-0.55
-	./chkrootkit | grep -v '!' > ../../$OUTPUT/chkrootkit
+	./chkrootkit 2>/dev/null  | grep -v '!' > ../../$OUTPUT/chkrootkit
 	cd ../..
 }
 
@@ -52,15 +59,7 @@ if [ $ARG_PKGMGR = "yes" ]; then
 	test_pkgmgr_integrity
 fi
 
-# blake2 test
-cd src/blake2sum
-./blake2sum > ../../$OUTPUT/blake2sum
-cd ../..
-
-
-
-
-
+test_blake2sum
 
 # rootkit tests
 if [ $ARG_PKGMGR = "yes" ]; then
